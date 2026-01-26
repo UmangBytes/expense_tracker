@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import Input from '../../components/Inputs/Input';
 import {Link} from "react-router-dom"
+import { validateEmail } from '../../utils/helper';
 
 const Login = () => {
 
@@ -15,11 +16,14 @@ const Login = () => {
 
     if(!validateEmail(email)){
       setError("Please enter a valid email address.")
+      return ;
     }
 
-    if(!password || password.trim().length===0){
+    if(!password){
       setError("Please enter the password")
+      return;
     }
+
 
     setError("")
 
@@ -51,7 +55,7 @@ const Login = () => {
       type="password"
       />
 
-      {error && <p className=''>{error}</p>}
+      {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
 
       <button type='submit' className='btn-primary'>
         LOGIN
