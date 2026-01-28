@@ -6,7 +6,7 @@ const generateToken=(id)=>{
     return jwt.sign({
         id,
     },process.env.JWT_SECRET,{
-        expiresIn:"1h"
+        expiresIn:"7d"
     });
 };
 
@@ -74,7 +74,7 @@ exports.loginUser=async(req,res)=>{
         if(!user || !(await user.comparePassword(password))){
             return res.status(400).json({message:"Invalid credentials"})
         }
-        return res.status(200).json({
+         res.status(200).json({
             id:user._id,
             user,
             token:generateToken(user._id),
