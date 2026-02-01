@@ -18,7 +18,7 @@ exports.registerUser =async (req,res)=>{
         })
     }
     
-    const {fullName,email,password,profileImageURL}=req.body;
+    const {fullName,email,password,profileImageUrl}=req.body;
 
     if(!fullName || !email || !password){
         return res.status(400).json({
@@ -34,12 +34,15 @@ exports.registerUser =async (req,res)=>{
                 message:"email already exists",
             })
         }
-
+        
+        
+        console.log('profileImageURL=',profileImageUrl);
+        
         const user=await User.create({
             fullName,
             email,
             password,
-            profileImageURL
+            profileImageUrl
         })
 
         return res.status(201).json({
@@ -74,7 +77,7 @@ exports.loginUser=async(req,res)=>{
         if(!user || !(await user.comparePassword(password))){
             return res.status(400).json({message:"Invalid credentials"})
         }
-         res.status(200).json({
+        return  res.status(200).json({
             id:user._id,
             user,
             token:generateToken(user._id),

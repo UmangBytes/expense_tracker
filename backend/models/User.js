@@ -17,7 +17,7 @@ const UserSchema=new Schema({
         required:true,
         trim:true,
     },
-    profileImageURL:{
+    profileImageUrl:{
         type:String,
         default:null,
     }

@@ -13,7 +13,8 @@ const ProfilePhotoSelector = ({image,setImage}) => {
         if(!file){
             return ;
         }
-
+        console.log("file=",file);
+        
         setImage(file);
 
         const preview=URL.createObjectURL(file);
