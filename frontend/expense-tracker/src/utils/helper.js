@@ -60,7 +60,7 @@ export const prepareExpenseLineChartData=(data=[])=>{
         const sortedData=[...data].sort((a,b)=>new Date(a.date)-new Date(b.date))
 
         const chartData=sortedData.map((item)=>({
-                moment:moment(item?.date).format("Do MMM"),
+                month:moment(item?.date).format("Do MMM"),
                 amount:item?.amount,
                 category:item?.category
         }))

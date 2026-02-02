@@ -5,6 +5,10 @@ import { API_PATHS } from '../../utils/apiPaths';
 import toast from 'react-hot-toast';
 import axiosInstance from '../../utils/axiosInstance';
 import ExpenseOverView from '../../components/Expense/ExpenseOverView';
+import Modal from '../../components/Modal';
+import AddExpenseForm from '../../components/Expense/AddExpenseForm';
+import ExpenseList from '../../components/Expense/ExpenseList';
+import DeleteAlert from '../../components/DeleteAlert';
 
 const Expense = () => {
 
@@ -78,26 +82,55 @@ const Expense = () => {
 
     } 
 
-    const deleteIncome=async (id)=>{
+
+     const deleteExpense=async (id)=>{
         try {
           
           setOpenDeleteAlert({
             show:false,
             data:null
           })
-          toast.success("Income details deleted successfully")
-          setIncomeData((prev) =>
+          toast.success("Expense details deleted successfully")
+          setExpenseData((prev) =>
           prev.filter((item) => String(item._id) !== String(id))
           );
 
-          await axiosInstance.delete(API_PATHS.INCOME.DELETE_INCOME(id))
+          await axiosInstance.delete(API_PATHS.EXPENSE.DELETE_EXPENSE(id))
           //  fetchIncomeDetails();
           
         } catch (error) {
-          console.error("Error deleting income:",error.response?.data?.message || error.message) 
+          console.error("Error deleting expense:",error.response?.data?.message || error.message) 
         }
     }
 
+    const handleDownloadExpenseDetails=async ()=>{
+      try {
+        const response=await axiosInstance.get(API_PATHS.EXPENSE.DOWNLOAD_EXPENSE,{
+          responseType:'blob'
+        })
+
+        console.log('response=',response);
+
+        const url=window.URL.createObjectURL(new Blob([response.data]))
+       const link = document.createElement("a");
+       link.href = url;
+       link.download = "expense_details.xlsx";
+
+        document.body.appendChild(link);
+        link.click();
+
+    
+       document.body.removeChild(link);
+       window.URL.revokeObjectURL(url);
+
+
+      } catch (error) {
+        console.log('Error downloading expense details:',error);
+        toast.error("Failed to download details.Please try again later.")
+      }
+    }
+
+  
     useEffect(()=>{
       fetchExpenseDetails()
 
@@ -114,7 +147,35 @@ const Expense = () => {
               onExpenseIncome={()=>setOpenAddExpenseModal(true)}
               />
             </div>
-          </div>
+
+            <ExpenseList 
+              transactions={expenseData}
+              onDelete={(id)=>{
+                setOpenDeleteAlert({show:true,data:id})
+              }}
+              onDownload={handleDownloadExpenseDetails}
+              />
+            </div>
+
+          <Modal
+          isOpen={openAddExpenseModal}
+          onClose={()=>setOpenAddExpenseModal(false)}
+          title="Add Expense"
+          >
+            <AddExpenseForm onAddExpense={handleAddExpense} />
+          </Modal>
+
+          <Modal
+        isOpen={openDeleteAlert.show}
+        onClose={()=>setOpenDeleteAlert({show:false,data:null})}
+        title="Delete Income"
+        >
+            <DeleteAlert 
+            content="Are you sure want to delete this income detail?"
+            onDelete={()=>deleteExpense(openDeleteAlert.data)}
+            />
+
+        </Modal>
       </div>
     </DashboardLayout>
   )
