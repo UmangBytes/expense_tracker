@@ -13,7 +13,7 @@ import {
 // import CustomTooltip from './CustomTooltip'
 
 const CustomBarChart = ({data}) => {
-    console.log('data=',data);
+
     
 
     const getBarColor=(index)=>{
@@ -41,13 +41,15 @@ const CustomBarChart = ({data}) => {
     };
 
 
+    console.log('data in custom bar chart=',data);
+
   return (
     <div className='bg-white mt-6'>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
 
         <CartesianGrid stroke='none' />
-        <XAxis dataKey="category" tick={{fontSize:12,fill:"#555" }} stroke='none' />
+        <XAxis dataKey="month" tick={{fontSize:12,fill:"#555" }} stroke='none' />
         <YAxis  tick={{fontSize:12,fill:"#555"}} stroke='none'/>
 
         <Tooltip content={CustomTooltip} />

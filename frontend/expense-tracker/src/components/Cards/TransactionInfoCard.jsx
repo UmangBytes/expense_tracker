@@ -14,7 +14,8 @@ const TransactionInfoCard = ({
     date,
     amount,
     type,
-    hideDeleteBtn
+    hideDeleteBtn,
+    onDelete
 }) => {
 
     console.log('type=',type);
